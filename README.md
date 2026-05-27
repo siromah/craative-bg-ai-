@@ -1,11 +1,39 @@
-<div align="center">
+# AILABSBG
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+## Authentication setup
 
-  <h1>Built with AI Studio</h2>
+This project uses Supabase Auth.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+Create a Supabase project and add these environment variables:
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_publishable_or_anon_key
+VITE_PUBLIC_SITE_URL=http://localhost:5173
+```
 
-</div>
+Do not use the service_role key in the frontend.
+
+In Supabase, go to:
+
+Authentication → URL Configuration
+
+Set Site URL:
+
+http://localhost:5173
+
+For production, set it to your real domain.
+
+Add Redirect URLs:
+
+http://localhost:5173/*
+https://your-domain.com/*
+
+Enable Email/Password provider in:
+
+Authentication → Providers → Email
+
+Then run:
+
+npm install
+npm run dev
