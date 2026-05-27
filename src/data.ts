@@ -1,26 +1,23 @@
 export const INIT_USERS = [
   {id:'u1',fname:'Мария',lname:'Георгиева',email:'maria@demo.com',pass:'demo123',role:'freelancer',bio:'Freelancer в digital marketing. Използвам AI всеки ден.',color:'#fff3ee',tc:'#b84a15',initials:'МГ',isAdmin:false,joined:'2024-01-15',tools:['ChatGPT','Claude','Canva AI']},
   {id:'u2',fname:'Стефан',lname:'Димитров',email:'stefan@demo.com',pass:'demo123',role:'business',bio:'E-commerce founder. Автоматизирам всичко с Make.com.',color:'#eef4ff',tc:'#1f5aad',initials:'СД',isAdmin:false,joined:'2024-02-10',tools:['ChatGPT','Make.com','Perplexity']},
-  {id:'u3',fname:'Виктория',lname:'Николова',email:'victoria@demo.com',pass:'demo123',role:'creator',bio:'Content creator. 80K followers. AI content системи.',color:'#eefbf4',tc:'#157a4d',initials:'ВН',isAdmin:false,joined:'2024-03-05',tools:['Claude','Midjourney','ElevenLabs']},
+  {id:'u3',fname:'Виктория',lname:'Николова',email:'victoria@demo.com',pass:'demo123',role:'creator',bio:'Content creator. AI content системи.',color:'#eefbf4',tc:'#157a4d',initials:'ВН',isAdmin:false,joined:'2024-03-05',tools:['Claude','Midjourney','ElevenLabs']},
   {id:'admin',fname:'Админ',lname:'AILABSBG',email:'admin@ailabsbg.com',pass:'admin123',role:'admin',bio:'Основател на AILABSBG.',color:'#fff3ee',tc:'#b84a15',initials:'АИ',isAdmin:true,joined:'2024-01-01',tools:['Claude','ChatGPT','Midjourney','Make.com']}
 ];
 
 export const INIT_POSTS = [
-  {id:'p1',uid:'u1',type:'win',text:'Изградих automation за email sequences с Make.com + Claude. Спестявам 8 часа седмично! Споделям целия workflow в коментарите 🔥',tags:['Automation','Make.com','Win'],likes:['u2','u3'],saved:[],comments:[{id:'c1',uid:'u2',text:'Браво! Как е структуриран trigger-ът? Имаш ли шаблон?',time:Date.now()-3600000}],time:Date.now()-600000,pinned:true},
-  {id:'p2',uid:'u2',type:'question',text:'Как пишете system prompt за Claude за customer support? Имам e-commerce бизнес и търся идеи. Някой пробвал ли е?',tags:['Claude','Customer Support'],likes:['u1'],saved:[],comments:[{id:'c2',uid:'admin',text:'Виж Prompt Library-то — има готов template за Customer Support AI! 👆',time:Date.now()-3000000}],time:Date.now()-3600000,pinned:false},
-  {id:'p3',uid:'admin',type:'announcement',text:'📢 Нов урок е качен! "AI Productivity System" е достъпен в Lessons секцията. Включва templates, workflows и практически задачи. Приятно учене! 🎓',tags:['Announcement'],likes:[],saved:[],comments:[],time:Date.now()-86400000,pinned:false},
-  {id:'p4',uid:'u3',type:'prompt-share',text:'Споделям любимия си prompt за Instagram captions с Claude:\n\n"Ти си expert social media copywriter. Напиши 5 Instagram caption варианта за [тема]. Тонът трябва да е [описание]. Включи emojis и call-to-action. Максимум 150 думи."\n\nРаботи перфектно! ✨',tags:['Claude','Instagram','Content'],likes:['u1','u2','admin'],saved:[],comments:[],time:Date.now()-7200000,pinned:false}
+  {id:'p1',uid:'u1',type:'win',text:'Изградих automation за email sequences с Make.com + Claude. Спестявам 8 часа седмично. Споделям workflow-а в коментарите.',tags:['Automation','Make.com','Win'],likes:['u2'],saved:[],comments:[{id:'c1',uid:'u2',text:'Браво! Как е структуриран trigger-ът? Имаш ли шаблон?',time:Date.now()-3600000}],time:Date.now()-600000,pinned:true},
+  {id:'p2',uid:'u2',type:'question',text:'Как пишете system prompt за Claude за customer support? Имам e-commerce бизнес и търся идеи. Някой пробвал ли е?',tags:['Claude','Customer Support'],likes:['u1'],saved:[],comments:[{id:'c2',uid:'admin',text:'Виж Prompt Library-то — има готов template за Customer Support AI!',time:Date.now()-3000000}],time:Date.now()-3600000,pinned:false}
 ];
 
 export const INIT_NOTIFS = [
-  {id:'n1',text:'Мария хареса твоя пост',icon:'❤️',time:Date.now()-300000,read:false},
-  {id:'n2',text:'Нов коментар от Стефан',icon:'💬',time:Date.now()-900000,read:false},
-  {id:'n3',text:'AI Workflow Q&A — Вторник 13 Май 19:00ч',icon:'📅',time:Date.now()-3600000,read:true}
+  {id:'n1',text:'Мария хареса твоя пост',icon:'heart',time:Date.now()-300000,read:false},
+  {id:'n2',text:'Нов коментар от Стефан',icon:'message',time:Date.now()-900000,read:false}
 ];
 
 export const PROMPTS = [
   {id:'pr1',title:'Email sequence automation',cat:'automation',text:'Напиши 5-стъпкова email nurture sequence за [продукт/услуга]. Всеки email трябва да е фокусиран върху конкретна болка на клиента. Тон: приятелски и professional. Включи subject lines.',saves:24},
-  {id:'pr2',title:'Instagram caption generator',cat:'content',text:'Ти си expert social media copywriter. Напиши 5 Instagram caption варианта за [тема]. Тонът трябва да е [описание]. Включи emojis и call-to-action. Максимум 150 думи.',saves:47},
+  {id:'pr2',title:'Instagram caption generator',cat:'content',text:'Ти си expert social media copywriter. Напиши 5 Instagram caption варианта за [тема]. Тонът трябва да е [описание]. Включи CTA. Максимум 150 думи.',saves:47},
   {id:'pr3',title:'Meeting summary builder',cat:'productivity',text:'Ти си executive assistant. Ето notes от среща: [notes]. Напиши чист summary с: 1) Основни решения 2) Action items с отговорни и дедлайни 3) Следваща стъпка.',saves:31},
   {id:'pr4',title:'Customer support response',cat:'business',text:'Ти си friendly customer support agent за [компания]. Клиент пише: "[съобщение]". Напиши empathetic отговор, предложи решение, и предложи follow-up. Тон: топъл и professional.',saves:18},
   {id:'pr5',title:'Blog post outline creator',cat:'marketing',text:'Напиши детайлен outline за blog post на тема: [тема]. Включи: compelling hook, 5-7 main sections с подточки, key takeaways и CTA. Target audience: [аудитория].',saves:22},
@@ -39,7 +36,7 @@ export const LESSONS_MODS = [
     {id:'l2',title:'Prompt Engineering основи',dur:'18 мин',h:'Prompt Engineering основи',p1:'Prompt engineering е изкуството да комуникираш ефективно с AI. Добрият prompt е ясен, конкретен и дава context.',p2:'Структурата на добрия prompt: Роля + Задача + Context + Формат + Ограничения. Например: "Ти си expert copywriter. Напиши email за [клиент]. Тонът трябва да е professional. Максимум 200 думи."',p3:'Практическо упражнение: Вземи задача, която имаш тази седмица, и напиши prompt по тази структура. Сравни резултатите с и без структурата.'},
     {id:'l3',title:'AI Productivity System',dur:'22 мин',h:'AI Productivity System',p1:'Вместо да отваряш ChatGPT random, трябва да изградиш система. AI Productivity System е набор от готови prompts, workflows и навици.',p2:'Компонентите: 1) Prompt Library с твоите най-използвани prompts 2) Daily AI habits 3) Template библиотека 4) Output review процес.',p3:'Инструменти: Notion за организиране на prompts, ChatGPT за изпълнение, Perplexity за research. Ключово: всеки ден прави 3 неща с AI, дори малки.'},
     {id:'l4',title:'ChatGPT vs Claude vs Gemini',dur:'15 мин',h:'ChatGPT, Claude и Gemini — кога какво да използваш',p1:'Всеки AI модел има своите strengths. Разбирането на тези разлики ти дава огромно предимство.',p2:'ChatGPT: най-добър за creative writing, coding, и general tasks. Claude: най-добър за дълги анализи, business writing, и nuanced задачи. Gemini: най-добър за Google integration и multimodal tasks.',p3:'Практика: Тази седмица използвай само един tool и научи limits-ите internal. Следващата седмица опитай друг за същите задачи. Разликата ще те изненада.'},
-    {id:'l5',title:'AI Workflows 101',dur:'20 мин',h:'AI Workflows 101',p1:'Workflow е последователност от AI-assisted стъпки, която превръща input в output по предсказуем начин.',p2:'Пример за content workflow: Research (Perplexity) → Outline (Claude) → Draft (ChatGPT) → Edit (Claude) → Image (Midjourney) → Publish.',p3:'Защо workflows са важни: Повтаряемост. Качество. Скорост. Когато workflow-ът е готов, можеш да го делегираш или автоматизираш.'}
+    {id:'l5',title:'AI Workflows 101',dur:'20 мин',h:'AI Workflows 101',p1:'Workflow е последоватателност от AI-assisted стъпки, която превръща input в output по предсказуем начин.',p2:'Пример за content workflow: Research (Perplexity) → Outline (Claude) → Draft (ChatGPT) → Edit (Claude) → Image (Midjourney) → Publish.',p3:'Защо workflows са важни: Повтаряемост. Качество. Скорост. Когато workflow-ът е готов, можеш да го делегираш или автоматизираш.'}
   ]},
   {title:'Ден 2 — Content & Automation',lessons:[
     {id:'l6',title:'AI Content System',dur:'25 мин',h:'AI Content System',p1:'AI Content System е набор от workflows, templates и processes, които позволяват да произвеждаш повече content с по-малко усилие.',p2:'Компонентите: Content Calendar AI, Repurposing workflows, Voice/Tone consistency, Bulk creation strategies.',p3:'Начало: Документирай как правиш content сега. После добави AI на всяка стъпка. Накрая имаш система.'},
@@ -53,14 +50,41 @@ export const LESSONS_MODS = [
     {id:'l12',title:'Customer Support AI',dur:'19 мин',h:'Customer Support AI',p1:'AI може да обработва 70% от customer queries автоматично, оставяйки сложните cases за хора.',p2:'Архитектура: FAQ база → Claude API → Routing logic → Human escalation. Инструменти: Intercom, Zendesk, custom.',p3:'Важно: AI трябва да знае кога да каже "не знам" и да ескалира. Никога не лъже клиента.'},
     {id:'l13',title:'Business Automation Stack',dur:'27 мин',h:'Business Automation Stack',p1:'Automation Stack е съвкупността от tools и workflows, които автоматизират твоя бизнес.',p2:'Layers: Data (Airtable/Notion) → Automation (Make.com/Zapier) → AI (Claude API/OpenAI) → Communication (Email/Slack) → Analytics.',p3:'Принцип: Автоматизирай repetitive first. После complex. После exceptions.'},
     {id:'l14',title:'Scaling с AI',dur:'21 мин',h:'Scaling workflows с AI',p1:'Scaling означава повече output с по-малко пропорционален input. AI е leverage.',p2:'Стратегии: Templatize всичко, Automate repetitive, Delegate decisions на AI, Measure и optimize.',p3:'Mindset shift: Не питай "как мога да направя X?" Питай "как мога да направя 10x X с AI?"'},
-    {id:'l15',title:'Твоят AI Roadmap',dur:'15 мин',h:'Твоят AI Business Roadmap',p1:'Последен урок: как да продължиш напред след intensive-а.',p2:'90-day plan: 30 дни — основни инструменти и habits. 60 дни — първа automation. 90 дни — measurable time savings.',p3:'Community е тук за теб. Задавай въпроси, споделяй wins, помагай на другите. Успех! 🚀'}
+    {id:'l15',title:'Твоят AI Roadmap',dur:'15 мин',h:'Твоят AI Business Roadmap',p1:'Последен урок: как да продължиш напред след intensive-а.',p2:'90-day plan: 30 дни — основни инструменти и habits. 60 дни — първа automation. 90 дни — measurable time savings.',p3:'Community е тук за теб. Задавай въпроси, споделяй wins, помагай на другите. Успех!'}
   ]}
 ];
 
 export const EVENTS_DATA = [
-  {id:'e1',day:'13',mo:'Май',title:'AI Workflow Q&A',desc:'Live сесия с нашия екип. Задавай въпроси за workflows, automation и AI tools.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:20},
-  {id:'e2',day:'15',mo:'Май',title:'Live: Prompt Engineering с Claude',desc:'Ще напишем заедно system prompts за различни бизнес use cases.',time:'18:30ч',dur:'60 мин',platform:'Zoom',spots:25},
-  {id:'e3',day:'17',mo:'Май',title:'Make.com Automation Workshop',desc:'Практическо workshop — изграждаме реална automation от нула.',time:'11:00ч',dur:'120 мин',platform:'Zoom',spots:15},
-  {id:'e4',day:'20',mo:'Май',title:'AI за e-commerce: Office Hours',desc:'Специализирана сесия за e-commerce бизнеси. Customer support AI, order automation.',time:'17:00ч',dur:'90 мин',platform:'Zoom',spots:18},
-  {id:'e5',day:'22',mo:'Май',title:'Content AI Masterclass',desc:'Как да изградиш пълна AI content система за social media.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:30}
+  {id:'e1',day:'13',mo:'Юни',title:'AI Workflow Q&A',desc:'Live сесия с нашия екип. Задавай въпроси за workflows, automation и AI tools.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:20},
+  {id:'e2',day:'15',mo:'Юни',title:'Live: Prompt Engineering с Claude',desc:'Ще напишем заедно system prompts за различни бизнес use cases.',time:'18:30ч',dur:'60 мин',platform:'Zoom',spots:25},
+  {id:'e3',day:'17',mo:'Юни',title:'Make.com Automation Workshop',desc:'Практическо workshop — изграждаме реална automation от нула.',time:'11:00ч',dur:'120 мин',platform:'Zoom',spots:15},
+  {id:'e4',day:'20',mo:'Юни',title:'AI за e-commerce: Office Hours',desc:'Специализирана сесия за e-commerce бизнеси. Customer support AI, order automation.',time:'17:00ч',dur:'90 мин',platform:'Zoom',spots:18},
+  {id:'e5',day:'22',mo:'Юни',title:'Content AI Masterclass',desc:'Как да изградиш пълна AI content система за social media.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:30}
+];
+
+export const PRICING_PLANS = [
+  {
+    id: 'starter',
+    name: 'Starter',
+    desc: 'Perfect for individuals exploring AI.',
+    monthly: 0,
+    yearly: 0,
+    features: ['Access to Prompt Library', 'Community read-only', '3 Academy lessons', 'Email support']
+  },
+  {
+    id: 'pro',
+    name: 'Pro',
+    desc: 'For professionals building with AI daily.',
+    monthly: 29,
+    yearly: 290,
+    features: ['Full Prompt Library', 'Community posting', 'All Academy lessons', 'Event discounts', 'Priority support']
+  },
+  {
+    id: 'team',
+    name: 'Team',
+    desc: 'For teams automating together.',
+    monthly: 79,
+    yearly: 790,
+    features: ['Everything in Pro', 'Up to 5 seats', 'Shared prompt workspace', 'Team analytics', 'Dedicated onboarding']
+  }
 ];

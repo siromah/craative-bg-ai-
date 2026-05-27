@@ -3,77 +3,72 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer style={{
-      borderTop: '1px solid var(--bdr)', 
-      background: 'var(--bg)',
-      padding: '80px 24px 40px', 
-      marginTop: 'auto',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Decorative gradient blob */}
-      <div style={{
-          position: 'absolute', top: '-200px', left: '50%', transform: 'translateX(-50%)', width: '1000px', height: '400px',
-          backgroundImage: 'radial-gradient(ellipse at 50% 0%, var(--orb) 0%, transparent 70%)',
-          opacity: 0.6, zIndex: 0, pointerEvents: 'none'
-      }}></div>
+    <footer className="border-t border-border/50 bg-bg mt-auto relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-accent/[0.03] rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
 
-      <div style={{maxWidth: 1200, margin: '0 auto', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 64, justifyContent: 'space-between', position: 'relative', zIndex: 1}}>
-        
-        <div style={{flex: '1 1 320px'}}>
-          <div style={{display: 'flex', alignItems: 'center', marginBottom: 16}}>
-            <img 
-              src="/logo.png" 
-              alt="AILABSBG" 
-              style={{height: 48, borderRadius: '50%'}} 
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                const fb = document.getElementById('footer-fallback');
-                if (fb) fb.style.display = 'block';
-              }} 
-            />
-            <div id="footer-fallback" style={{fontWeight: 800, fontSize: 24, letterSpacing: '-0.5px', color: 'var(--txt)', display: 'none'}}>
-              AI<span style={{color: 'var(--or)'}}>LABS</span>BG
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-14 md:py-16 relative z-10">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 justify-between">
+          
+          <div className="md:max-w-sm">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-7 h-7 bg-gradient-to-br from-accent to-amber rounded-lg flex items-center justify-center">
+                <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
+              </div>
+              <span className="font-semibold text-[16px] text-ink-900 tracking-tight">AILABS</span>
+            </div>
+            <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
+              Premium AI community and academy for professionals who build with practical systems.
+            </p>
+            <div className="flex items-center gap-4 text-text-tertiary">
+              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-text-primary transition-colors">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-text-primary transition-colors">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-text-primary transition-colors">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </a>
             </div>
           </div>
-          <p style={{color: 'var(--txt2)', fontSize: 15, lineHeight: 1.6, maxWidth: 320, fontWeight: 500}}>
-            AILABSBG е премиум AI общност и академия. Изграждаме бъдещето чрез автоматизация на бизнеса и практически AI системи.
-          </p>
-        </div>
 
-        <div style={{display: 'flex', flexWrap: 'wrap', gap: 64, flex: '1 1 auto', justifyContent: 'flex-end'}}>
-          <div style={{minWidth: 140}}>
-            <h4 style={{fontSize: 13, fontWeight: 700, color: 'var(--txt)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 20}}>Платформа</h4>
-            <ul style={{listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14}}>
-               <li><Link to="/lessons" className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, transition: 'color 0.2s'}}>Академия</Link></li>
-               <li><Link to="/prompts" className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, transition: 'color 0.2s'}}>Промпти</Link></li>
-               <li><Link to="/community" className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, transition: 'color 0.2s'}}>Общност</Link></li>
-               <li><Link to="/events" className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, transition: 'color 0.2s'}}>Събития</Link></li>
-            </ul>
+          <div className="flex flex-wrap gap-10 md:gap-16">
+            <div>
+              <h4 className="text-[11px] font-bold text-ink-900 uppercase tracking-wider mb-4">Platform</h4>
+              <ul className="flex flex-col gap-2.5">
+                <li><Link to="/lessons" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Academy</Link></li>
+                <li><Link to="/prompts" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Prompts</Link></li>
+                <li><Link to="/community" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Community</Link></li>
+                <li><Link to="/events" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Events</Link></li>
+                <li><Link to="/pricing" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Pricing</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-[11px] font-bold text-ink-900 uppercase tracking-wider mb-4">Company</h4>
+              <ul className="flex flex-col gap-2.5">
+                <li><Link to="/about" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">About</Link></li>
+                <li><Link to="/contact" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Contact</Link></li>
+                <li><Link to="/system-check" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">System Check</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-[11px] font-bold text-ink-900 uppercase tracking-wider mb-4">Legal</h4>
+              <ul className="flex flex-col gap-2.5">
+                <li><Link to="/privacy" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Privacy</Link></li>
+                <li><Link to="/terms" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Terms</Link></li>
+                <li><Link to="/cookie-policy" className="text-[14px] text-text-secondary hover:text-text-primary transition-colors">Cookies</Link></li>
+              </ul>
+            </div>
           </div>
-          
-          <div style={{minWidth: 140}}>
-            <h4 style={{fontSize: 13, fontWeight: 700, color: 'var(--txt)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 20}}>Правни</h4>
-            <ul style={{listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14}}>
-               <li><Link to="/privacy" className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, transition: 'color 0.2s'}}>Поверителност</Link></li>
-               <li><Link to="/terms" className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, transition: 'color 0.2s'}}>Условия за ползване</Link></li>
-               <li><Link to="/cookie-policy" className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, transition: 'color 0.2s'}}>Политика за бисквитки</Link></li>
-               <li><span className="footer-link" style={{color: 'var(--txt2)', textDecoration: 'none', fontSize: 15, fontWeight: 500, cursor:'pointer', transition: 'color 0.2s'}} onClick={() => window.dispatchEvent(new Event('open-cookie-banner'))}>Настройки на бисквитки</span></li>
-            </ul>
-          </div>
+        </div>
+        
+        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-3 text-[12px] text-text-tertiary">
+          <span>&copy; {new Date().getFullYear()} AILABSBG. All rights reserved.</span>
+          <span>Prices in EUR. Platform is a prototype.</span>
         </div>
       </div>
-      
-      <div style={{maxWidth: 1200, margin: '64px auto 0', borderTop: '1px solid var(--bdr)', paddingTop: 32, display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', color: 'var(--txt3)', fontSize: 13, position: 'relative', zIndex: 1}}>
-        <span style={{fontWeight: 500}}>&copy; {new Date().getFullYear()} AILABSBG. Всички права запазени.</span>
-        <span style={{fontSize: 12, opacity: 0.8}}>Платформата е прототип и не предоставя правни или финансови съвети.</span>
-      </div>
-
-      <style>{`
-        .footer-link:hover {
-          color: var(--txt) !important;
-        }
-      `}</style>
     </footer>
   );
 }

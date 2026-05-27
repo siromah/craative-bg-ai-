@@ -13,7 +13,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   const [compText, setCompText] = useState('');
   const [compType, setCompType] = useState('win');
 
-  const addNotif = (text: string, icon = '🔔') => {
+  const addNotif = (text: string, icon = 'bell') => {
     const n = { id: 'n'+Date.now(), text, icon, time: Date.now(), read: false };
     updateDb('notifs', [n, ...db.notifs].slice(0, 50));
   };
@@ -33,7 +33,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
     updateDb('posts', [newPost, ...db.posts]);
     setCompText('');
     setCompExpanded(false);
-    showToast('Post published! 🎉');
+    showToast('Post published');
   };
 
   const toggleLike = (pid: string) => {
@@ -44,7 +44,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
       const idx = posts[i].likes.indexOf(currentUser.id);
       if (idx === -1) {
         posts[i].likes.push(currentUser.id);
-        addNotif(`${currentUser.fname} liked your post`, '❤️');
+        addNotif(`${currentUser.fname} liked your post`, 'heart');
       } else {
         posts[i].likes.splice(idx, 1);
       }
@@ -61,7 +61,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
       const idx = posts[i].saved.indexOf(currentUser.id);
       if (idx === -1) {
         posts[i].saved.push(currentUser.id);
-        showToast('Saved 🔖');
+        showToast('Saved');
       } else {
         posts[i].saved.splice(idx, 1);
         showToast('Removed from saved');
@@ -79,7 +79,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
       if(!posts[i].comments) posts[i].comments = [];
       posts[i].comments.push({ id: 'c'+Date.now(), uid: currentUser.id, text: val.trim(), time: Date.now() });
       updateDb('posts', posts);
-      addNotif(`${currentUser.fname} commented on your post`, '💬');
+      addNotif(`${currentUser.fname} commented on your post`, 'message');
     }
   };
 
@@ -98,7 +98,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   };
 
   const getTypeInfo = (type: string) => {
-    const m:any = {win:{label:'🏆 Win',variant:'success'},question:{label:'❓ Question',variant:'info'},workflow:{label:'🔧 Workflow',variant:'warning'},'prompt-share':{label:'💡 Prompt',variant:'accent'},announcement:{label:'📢 Announcement',variant:'default'}};
+    const m:any = {win:{label:'Win',variant:'success'},question:{label:'Question',variant:'info'},workflow:{label:'Workflow',variant:'warning'},'prompt-share':{label:'Prompt',variant:'accent'},announcement:{label:'Announcement',variant:'default'}};
     return m[type] || {label:type,variant:'neutral'};
   };
 
@@ -111,7 +111,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   const escH = (t: string) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   return (
-    <div className="min-h-screen bg-bg-subtle text-text-primary px-4 md:px-6 py-6 md:py-12">
+    <div className="min-h-screen warm-gradient text-text-primary px-4 md:px-6 py-6 md:py-12">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
         
         {/* LEFT SIDEBAR */}
@@ -129,9 +129,9 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Button variant="secondary" className="w-full justify-center" onClick={() => setPage('profile')}>My Profile</Button>
+                  <Button variant="secondary" className="w-full justify-center rounded-xl" onClick={() => setPage('profile')}>My Profile</Button>
                   {currentUser.isAdmin && (
-                    <Button variant="ghost" className="w-full justify-center text-rose" onClick={() => setPage('admin')}><Settings size={14}/> Admin Panel</Button>
+                    <Button variant="ghost" className="w-full justify-center text-rose rounded-xl" onClick={() => setPage('admin')}><Settings size={14}/> Admin Panel</Button>
                   )}
                 </div>
               </CardBody>
@@ -143,10 +143,10 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
               </div>
               <CardBody className="p-5 relative z-10 flex flex-col items-start gap-4">
                 <div>
-                  <div className="text-[16px] font-bold text-ink-900 mb-1">Join the community!</div>
-                  <div className="text-[13px] text-text-secondary leading-relaxed">Connect with over 500+ builders and creators.</div>
+                  <div className="text-[16px] font-bold text-ink-900 mb-1">Join the community</div>
+                  <div className="text-[13px] text-text-secondary leading-relaxed">Connect with other builders and creators.</div>
                 </div>
-                <Button className="w-full" onClick={() => openModal('signup')}>Register Now &rarr;</Button>
+                <Button className="w-full rounded-xl" onClick={() => openModal('signup')}>Register Now</Button>
               </CardBody>
             </Card>
           )}
@@ -157,20 +157,20 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
             <div className="flex flex-col gap-1">
               <button 
                 onClick={() => setFeedFilter('all')}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-[14px] transition-colors border ${feedFilter === 'all' ? 'bg-bg text-ink-900 font-semibold border-border shadow-sm' : 'text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900'}`}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-[14px] transition-colors border ${feedFilter === 'all' ? 'bg-bg text-ink-900 font-semibold border-border shadow-sm' : 'text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900'}`}
               >
                 <div className="w-6 flex justify-center"><Home size={18} /></div> Live Feed
                 <span className={`ml-auto text-[11px] font-bold px-2 py-0.5 rounded-full ${feedFilter === 'all' ? 'bg-accent text-white' : 'bg-border text-text-secondary'}`}>
                   {db.posts.length}
                 </span>
               </button>
-              <button onClick={() => setPage('prompts')} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-[14px] text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900 transition-colors">
+              <button onClick={() => setPage('prompts')} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-[14px] text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900 transition-colors">
                 <div className="w-6 flex justify-center"><Lightbulb size={18} /></div> Prompts
               </button>
-              <button onClick={() => setPage('lessons')} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-[14px] text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900 transition-colors">
+              <button onClick={() => setPage('lessons')} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-[14px] text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900 transition-colors">
                 <div className="w-6 flex justify-center"><GraduationCap size={18} /></div> Academy
               </button>
-              <button onClick={() => setPage('events')} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-[14px] text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900 transition-colors">
+              <button onClick={() => setPage('events')} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-[14px] text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900 transition-colors">
                 <div className="w-6 flex justify-center"><Calendar size={18} /></div> Events
               </button>
             </div>
@@ -189,7 +189,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 <button 
                   key={f.id}
                   onClick={() => setFeedFilter(f.id)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-[14px] transition-colors border ${feedFilter === f.id ? 'bg-bg text-ink-900 font-semibold border-border shadow-sm' : 'text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900'}`}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-[14px] transition-colors border ${feedFilter === f.id ? 'bg-bg text-ink-900 font-semibold border-border shadow-sm' : 'text-text-secondary border-transparent hover:bg-black/5 hover:text-ink-900'}`}
                 >
                   <div className="w-6 flex justify-center"><f.icon size={18} /></div> {f.label}
                 </button>
@@ -202,22 +202,22 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
         <div className="flex-1 min-w-0 flex flex-col gap-6">
           
           <div className="mb-2 lg:mb-6">
-            <h1 className="text-[28px] font-semibold text-ink-900 tracking-tight mb-2">Community Feed</h1>
+            <h1 className="text-[28px] md:text-[36px] font-semibold text-ink-900 tracking-tight mb-2">Community Feed</h1>
             <p className="text-[16px] text-text-secondary">Discuss tools, share prompts, and ask questions.</p>
           </div>
 
           {/* Mobile Categories (Horizontal Roll) */}
-          <div className="flex lg:hidden overflow-x-auto gap-2 pb-4 snap-x custom-scrollbar">
-            <Badge variant={feedFilter === 'all' ? 'default' : 'neutral'} className="cursor-pointer snap-start shrink-0" onClick={() => setFeedFilter('all')}>All Posts</Badge>
-            <Badge variant={feedFilter === 'win' ? 'default' : 'neutral'} className="cursor-pointer snap-start shrink-0" onClick={() => setFeedFilter('win')}>Wins</Badge>
-            <Badge variant={feedFilter === 'question' ? 'default' : 'neutral'} className="cursor-pointer snap-start shrink-0" onClick={() => setFeedFilter('question')}>Questions</Badge>
-            <Badge variant={feedFilter === 'workflow' ? 'default' : 'neutral'} className="cursor-pointer snap-start shrink-0" onClick={() => setFeedFilter('workflow')}>Workflows</Badge>
-            <Badge variant={feedFilter === 'prompt-share' ? 'default' : 'neutral'} className="cursor-pointer snap-start shrink-0" onClick={() => setFeedFilter('prompt-share')}>Prompts</Badge>
+          <div className="flex lg:hidden overflow-x-auto gap-2 pb-4 snap-x custom-scrollbar hide-scrollbar">
+            <Badge variant={feedFilter === 'all' ? 'default' : 'outline'} className="cursor-pointer snap-start shrink-0 rounded-full px-3 py-1" onClick={() => setFeedFilter('all')}>All Posts</Badge>
+            <Badge variant={feedFilter === 'win' ? 'default' : 'outline'} className="cursor-pointer snap-start shrink-0 rounded-full px-3 py-1" onClick={() => setFeedFilter('win')}>Wins</Badge>
+            <Badge variant={feedFilter === 'question' ? 'default' : 'outline'} className="cursor-pointer snap-start shrink-0 rounded-full px-3 py-1" onClick={() => setFeedFilter('question')}>Questions</Badge>
+            <Badge variant={feedFilter === 'workflow' ? 'default' : 'outline'} className="cursor-pointer snap-start shrink-0 rounded-full px-3 py-1" onClick={() => setFeedFilter('workflow')}>Workflows</Badge>
+            <Badge variant={feedFilter === 'prompt-share' ? 'default' : 'outline'} className="cursor-pointer snap-start shrink-0 rounded-full px-3 py-1" onClick={() => setFeedFilter('prompt-share')}>Prompts</Badge>
           </div>
 
           {/* Composer */}
           {currentUser ? (
-            <Card className="bg-bg border-border">
+            <Card className="bg-bg border-border/50">
               <CardBody className="p-4 sm:p-6">
                 <div className="flex gap-4 items-start">
                   <Avatar size="md" initials={currentUser.initials} className="hidden sm:flex" />
@@ -225,7 +225,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                     {!compExpanded ? (
                       <button 
                         onClick={() => setCompExpanded(true)}
-                        className="w-full text-left px-5 py-3.5 bg-bg-subtle text-text-tertiary border border-border rounded-full text-[14px] hover:bg-black/5 transition-colors"
+                        className="w-full text-left px-5 py-3.5 bg-bg-subtle text-text-tertiary border border-border/50 rounded-full text-[14px] hover:bg-black/5 transition-colors"
                       >
                         Share a workflow, question, or win...
                       </button>
@@ -236,7 +236,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                           onChange={(e:any)=>setCompText(e.target.value)} 
                           placeholder="Write something helpful for the community..."
                           autoFocus
-                          className="min-h-[120px] mb-3 text-[15px]" 
+                          className="min-h-[120px] mb-3 text-[15px] rounded-xl" 
                         />
                         
                         <div className="flex flex-col gap-3 mb-6">
@@ -250,8 +250,8 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                             ].map(t => (
                               <Badge 
                                 key={t.id} 
-                                variant={compType === t.id ? 'accent' : 'neutral'}
-                                className="cursor-pointer text-[13px] py-1.5 px-3"
+                                variant={compType === t.id ? 'accent' : 'outline'}
+                                className="cursor-pointer text-[13px] py-1.5 px-3 rounded-full"
                                 onClick={() => setCompType(t.id)}
                               >
                                 {t.label}
@@ -261,8 +261,8 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                         </div>
                         
                         <div className="flex justify-end items-center gap-3 pt-4 border-t border-border">
-                          <Button variant="ghost" onClick={() => setCompExpanded(false)}>Cancel</Button>
-                          <Button onClick={submitPost} disabled={!compText.trim()}><Send size={16}/> Post</Button>
+                          <Button variant="ghost" onClick={() => setCompExpanded(false)} className="rounded-full">Cancel</Button>
+                          <Button onClick={submitPost} disabled={!compText.trim()} className="rounded-full"><Send size={16}/> Post</Button>
                         </div>
                       </motion.div>
                     )}
@@ -275,8 +275,8 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
               <h2 className="text-[20px] font-semibold text-ink-900 mb-2 tracking-tight">Log in to post</h2>
               <p className="text-[15px] text-text-secondary mb-6">Join the community to share your thoughts and workflows.</p>
               <div className="flex justify-center gap-4">
-                <Button variant="secondary" onClick={() => openModal('login')}>Log In</Button>
-                <Button onClick={() => openModal('signup')}>Register</Button>
+                <Button variant="secondary" className="rounded-full" onClick={() => openModal('login')}>Log In</Button>
+                <Button className="rounded-full" onClick={() => openModal('signup')}>Register</Button>
               </div>
             </Card>
           )}
@@ -285,10 +285,9 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
           <div className="flex flex-col gap-6">
             {postsToRender.length === 0 ? (
               <Card className="bg-bg-subtle border-dashed border-2 py-16 text-center">
-                <div className="text-[48px] opacity-20 mb-4">📭</div>
                 <h3 className="text-[18px] font-semibold text-ink-900 mb-2">No posts found</h3>
-                <p className="text-text-secondary mb-6">Be the first to share something in this category!</p>
-                <Button variant="secondary" onClick={() => {setFeedFilter('all'); setCompExpanded(true);}}>Post now</Button>
+                <p className="text-text-secondary mb-6">Be the first to share something in this category.</p>
+                <Button variant="secondary" className="rounded-full" onClick={() => {setFeedFilter('all'); setCompExpanded(true);}}>Post now</Button>
               </Card>
             ) : (
               <AnimatePresence>
@@ -313,8 +312,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
         </div>
 
         {/* RIGHT SIDEBAR */}
-        <div className="hidden xl:flex w-[320px] shrink-0 sticky top-[96px] flex-col gap-6 h-[calc(100vh-120px)] overflow-y-auto custom-scrollbar pl-2">
-          
+        <div className="hidden xl:flex w-[280px] shrink-0 sticky top-[96px] flex-col gap-6 h-[calc(100vh-120px)] overflow-y-auto custom-scrollbar pl-2">
           <Card className="bg-bg">
             <CardBody className="p-5">
               <div className="flex items-center gap-2 mb-4 text-[13px] font-bold text-text-tertiary uppercase tracking-wider">
@@ -324,7 +322,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 {db.posts.filter((p:any) => p.type === 'win').slice(0,3).map((p:any) => {
                   const a = db.users.find((u:any) => u.id === p.uid) || {fname:'?'};
                   return (
-                    <div key={p.id} className="flex gap-3 p-3 bg-bg-subtle border border-border rounded-lg items-start">
+                    <div key={p.id} className="flex gap-3 p-3 bg-bg-subtle border border-border/50 rounded-xl items-start">
                       <Avatar size="sm" initials={a.initials || a.fname.charAt(0)} />
                       <div className="text-[13px] text-text-secondary leading-snug">
                         <span className="font-semibold text-ink-900">{a.fname}</span>{' '}
@@ -333,37 +331,12 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                     </div>
                   );
                 })}
+                {db.posts.filter((p:any) => p.type === 'win').length === 0 && (
+                  <p className="text-[13px] text-text-tertiary">No wins shared yet.</p>
+                )}
               </div>
             </CardBody>
           </Card>
-          
-          <Card className="bg-bg">
-            <CardBody className="p-5">
-              <div className="flex items-center gap-2 mb-4 text-[13px] font-bold text-text-tertiary uppercase tracking-wider">
-                <Zap size={16} className="text-accent" /> Leaderboard
-              </div>
-              <div className="flex flex-col gap-4">
-                {db.users.sort((a:any, b:any) => (b.xp || 0) - (a.xp || 0)).slice(0,5).map((u:any, idx:number) => {
-                  const isTop = idx === 0;
-                  return (
-                    <div key={u.id} className="flex items-center gap-3">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold border ${isTop ? 'bg-amber-light text-amber border-amber/20' : 'bg-bg-subtle text-text-tertiary border-border'}`}>
-                        {idx + 1}
-                      </div>
-                      <Avatar size="sm" initials={u.initials} />
-                      <div className="flex-1 min-w-0">
-                        <div className="text-[13px] font-semibold text-ink-900 truncate">{u.fname} {u.lname}</div>
-                      </div>
-                      <Badge variant="neutral" className="text-[11px] px-2 py-0.5">
-                        {typeof u.xp === 'number' ? u.xp : (isTop ? '550' : idx === 1 ? '420' : '230')} XP
-                      </Badge>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardBody>
-          </Card>
-
         </div>
       </div>
       
@@ -388,7 +361,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
   const ti = getTypeInfo(p.type);
 
   return (
-    <Card className="bg-bg">
+    <Card className="bg-bg border-border/50">
       <CardBody className="p-5 sm:p-7 relative">
         {p.pinned && (
           <div className="absolute top-0 right-7 bg-amber-light text-amber px-3 py-1 text-[11px] font-bold rounded-b-lg border-x border-b border-amber/20 uppercase tracking-widest flex items-center gap-1.5">
@@ -404,7 +377,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
               <div className="text-[12px] text-text-tertiary flex items-center gap-2 mt-0.5">
                 {fTime(p.time)}
                 <span className="w-1 h-1 rounded-full bg-border-strong"></span>
-                <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border ${
+                <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-md border ${
                     ti.variant === 'success' ? 'bg-emerald-light text-emerald border-emerald/20' :
                     ti.variant === 'info' ? 'bg-sky-50 text-sky-600 border-sky-100' :
                     ti.variant === 'warning' ? 'bg-amber-light text-amber border-amber/20' :
@@ -423,7 +396,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                 <span className="w-1 h-1 bg-current rounded-full"></span>
                 <span className="w-1 h-1 bg-current rounded-full"></span>
               </span>
-              <div className="absolute top-full right-0 mt-1 bg-white border border-border shadow-md rounded-lg py-1 w-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
+              <div className="absolute top-full right-0 mt-1 bg-bg border border-border shadow-md rounded-xl py-1 w-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
                 <button onClick={() => delPost(p.id)} className="w-full text-left px-4 py-2 text-[13px] font-medium hover:bg-rose-50 text-rose transition-colors flex items-center gap-2">
                   <Trash2 size={14} /> Delete Post
                 </button>
@@ -437,7 +410,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
         {p.tags && p.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
             {p.tags.map((t:string) => (
-              <Badge key={t} variant="neutral" className="text-[12px]">{t}</Badge>
+              <Badge key={t} variant="outline" className="text-[12px] rounded-full">{t}</Badge>
             ))}
           </div>
         )}
@@ -476,7 +449,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
             >
               <div className="mt-6 pt-6 border-t border-border">
                 {(!p.comments || p.comments.length === 0) ? (
-                  <div className="text-[13px] text-text-tertiary text-center py-6">No comments yet. Start the conversation!</div>
+                  <div className="text-[13px] text-text-tertiary text-center py-6">No comments yet. Start the conversation.</div>
                 ) : (
                   <div className="flex flex-col gap-4">
                     {p.comments.map((c:any) => {
@@ -484,7 +457,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                       return (
                         <div key={c.id} className="flex gap-3">
                           <Avatar size="sm" initials={ca.initials} />
-                          <div className="flex-1 bg-bg-subtle p-3.5 rounded-2xl rounded-tl-sm border border-border">
+                          <div className="flex-1 bg-bg-subtle p-3.5 rounded-2xl rounded-tl-sm border border-border/50">
                             <div className="flex items-baseline gap-2 mb-1">
                               <span className="text-[13px] font-semibold text-ink-900">{ca.fname} {ca.lname}</span>
                               <span className="text-[11px] text-text-tertiary">{fTime(c.time)}</span>
@@ -502,7 +475,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                     <Avatar size="md" initials={currentUser.initials} className="hidden sm:flex" />
                     <div className="flex-1 flex gap-2">
                       <input 
-                        className="flex-1 w-full bg-bg border border-border rounded-full px-4 py-2 text-[14px] text-ink-900 placeholder:text-text-disabled focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors shadow-sm"
+                        className="flex-1 w-full bg-bg border border-border/50 rounded-full px-4 py-2 text-[14px] text-ink-900 placeholder:text-text-disabled focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors shadow-sm"
                         placeholder="Write a comment..." 
                         value={commentText} 
                         onChange={e=>setCommentText(e.target.value)} 
@@ -514,7 +487,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                     </div>
                   </div>
                 ) : (
-                  <div className="mt-6 text-center text-[13px] text-text-secondary bg-bg-subtle p-4 rounded-xl border border-border">
+                  <div className="mt-6 text-center text-[13px] text-text-secondary bg-bg-subtle p-4 rounded-xl border border-border/50">
                     <button className="text-accent font-semibold hover:underline" onClick={() => openModal('login')}>Log in</button> to comment on this post.
                   </div>
                 )}
@@ -526,4 +499,3 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
     </Card>
   );
 }
-

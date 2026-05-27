@@ -20,6 +20,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Admin from './pages/Admin';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Pricing from './pages/Pricing';
+import SystemCheck from './pages/SystemCheck';
 import Nav from './components/Nav';
 import ToastContainer from './components/ToastContainer';
 import AIAssistant from './components/AIAssistant';
@@ -133,6 +135,8 @@ function AppContent() {
           <Route path="/events" element={<Events {...props} />} />
           <Route path="/about" element={<About {...props} />} />
           <Route path="/contact" element={<Contact {...props} />} />
+          <Route path="/pricing" element={<Pricing {...props} />} />
+          <Route path="/system-check" element={<SystemCheck />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/cookie-policy" element={<CookiePolicy />} />

@@ -23,9 +23,8 @@ export default function Contact({ showToast }: any) {
     try {
       const endpoint = (import.meta as any).env?.VITE_CONTACT_ENDPOINT;
       if (!endpoint) {
-        // Mock success for preview environment
         await new Promise(r => setTimeout(r, 800));
-        showToast('Message sent successfully!');
+        showToast('Message sent successfully');
         setFormData({ name: '', email: '', subject: '', message: '' });
         setConsent(false);
         return;
@@ -33,13 +32,11 @@ export default function Contact({ showToast }: any) {
       
       const res = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
       if (!res.ok) throw new Error('Network error');
-      showToast('Message sent successfully!');
+      showToast('Message sent successfully');
       setFormData({ name: '', email: '', subject: '', message: '' });
       setConsent(false);
     } catch (error) {
@@ -50,14 +47,14 @@ export default function Contact({ showToast }: any) {
   };
 
   return (
-    <div className="min-h-screen bg-bg-subtle text-text-primary px-4 md:px-6 py-12 md:py-20 lg:py-24">
+    <div className="min-h-screen warm-gradient text-text-primary px-4 md:px-6 py-12 md:py-20 lg:py-24">
       <div className="max-w-3xl mx-auto">
         <div className="flex flex-col items-center text-center space-y-4 mb-12">
-          <div className="w-12 h-12 rounded-xl bg-accent-light/10 text-accent flex items-center justify-center mb-2">
+          <div className="w-12 h-12 rounded-xl bg-accent-light/50 text-accent flex items-center justify-center mb-2">
             <MessageSquare size={24} />
           </div>
           <h1 className="text-[40px] md:text-[56px] font-semibold text-ink-900 tracking-tight leading-tight">
-            Contact <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-light">Us</span>
+            Contact <span className="text-accent">Us</span>
           </h1>
           <p className="text-[18px] md:text-[20px] text-text-secondary max-w-xl leading-relaxed">
             Have questions about our training programs, partnerships, or the platform? Drop us a line.
@@ -65,7 +62,7 @@ export default function Contact({ showToast }: any) {
         </div>
 
         <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration: 0.4}}>
-          <Card className="bg-bg shadow-sm">
+          <Card className="bg-bg shadow-sm border-border/50">
             <CardBody className="p-8 md:p-10">
               <form onSubmit={handleSubmit} className="space-y-6">
                 
@@ -80,6 +77,7 @@ export default function Contact({ showToast }: any) {
                       value={formData.name} 
                       onChange={(e:any) => setFormData({...formData, name: e.target.value})} 
                       disabled={loading} 
+                      className="h-12 rounded-xl"
                     />
                   </div>
                   <div className="space-y-2">
@@ -92,6 +90,7 @@ export default function Contact({ showToast }: any) {
                       value={formData.email} 
                       onChange={(e:any) => setFormData({...formData, email: e.target.value})} 
                       disabled={loading} 
+                      className="h-12 rounded-xl"
                     />
                   </div>
                 </div>
@@ -106,6 +105,7 @@ export default function Contact({ showToast }: any) {
                     value={formData.subject} 
                     onChange={(e:any) => setFormData({...formData, subject: e.target.value})} 
                     disabled={loading} 
+                    className="h-12 rounded-xl"
                   />
                 </div>
                 
@@ -118,7 +118,7 @@ export default function Contact({ showToast }: any) {
                     value={formData.message} 
                     onChange={(e:any) => setFormData({...formData, message: e.target.value})} 
                     disabled={loading} 
-                    className="min-h-[160px] resize-y custom-scrollbar"
+                    className="min-h-[160px] resize-y custom-scrollbar rounded-xl"
                   />
                 </div>
                 
@@ -140,7 +140,7 @@ export default function Contact({ showToast }: any) {
                   </span>
                 </label>
                 
-                <Button type="submit" disabled={loading} className="w-full h-12 text-[15px] gap-2 mt-4 inline-flex items-center justify-center">
+                <Button type="submit" disabled={loading} className="w-full h-12 text-[15px] gap-2 mt-4 inline-flex items-center justify-center rounded-full">
                   {loading ? 'Sending...' : <>Send Message <Send size={16} /></>}
                 </Button>
               </form>
