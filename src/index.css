@@ -656,3 +656,228 @@ input, textarea, select { font-family: inherit; }
 .dark .theme-toggle-thumb {
   box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
+
+/* ============================================
+   FLOATING PARTICLES / AMBIENT MOTION
+   ============================================ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  33% { transform: translateY(-15px) translateX(10px); }
+  66% { transform: translateY(10px) translateX(-5px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.float-1 { animation: float 8s ease-in-out infinite; }
+.float-2 { animation: float 10s ease-in-out infinite 1s; }
+.float-3 { animation: float-slow 12s ease-in-out infinite 0.5s; }
+.float-4 { animation: float-slow 14s ease-in-out infinite 2s; }
+.pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+.orbit-slow { animation: orbit 20s linear infinite; }
+
+/* ============================================
+   GRADIENT ART THUMBNAILS
+   ============================================ */
+.gradient-art-1 {
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8c4a0 30%, #d4a574 60%, #c4703a 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+.gradient-art-2 {
+  background: linear-gradient(225deg, #e8ddd4 0%, #c9b8a8 40%, #a89080 70%, #8b7355 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 10s ease infinite;
+}
+.gradient-art-3 {
+  background: linear-gradient(45deg, #f0e8e0 0%, #d8c0b0 35%, #b89888 65%, #9a7870 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 9s ease infinite reverse;
+}
+.gradient-art-4 {
+  background: linear-gradient(315deg, #ede5db 0%, #d4c4b0 30%, #b8a090 60%, #9a8878 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 11s ease infinite;
+}
+.gradient-art-5 {
+  background: linear-gradient(180deg, #f5ede5 0%, #e0d0c0 50%, #c8b0a0 100%);
+  background-size: 200% 200%;
+}
+.gradient-art-6 {
+  background: linear-gradient(90deg, #e8ddd4 0%, #d0c0b0 50%, #b8a898 100%);
+  background-size: 200% 200%;
+}
+.dark .gradient-art-1 {
+  background: linear-gradient(135deg, #2d1f16 0%, #3d2820 30%, #4d3428 60%, #5c4030 100%);
+  background-size: 200% 200%;
+}
+.dark .gradient-art-2 {
+  background: linear-gradient(225deg, #1c1917 0%, #2a2420 40%, #383028 70%, #463c30 100%);
+  background-size: 200% 200%;
+}
+.dark .gradient-art-3 {
+  background: linear-gradient(45deg, #241c18 0%, #322820 35%, #403428 65%, #4e4038 100%);
+  background-size: 200% 200%;
+}
+.dark .gradient-art-4 {
+  background: linear-gradient(315deg, #1c1815 0%, #2a2420 30%, #383028 60%, #463c30 100%);
+  background-size: 200% 200%;
+}
+.dark .gradient-art-5 {
+  background: linear-gradient(180deg, #201c18 0%, #302820 50%, #403428 100%);
+  background-size: 200% 200%;
+}
+.dark .gradient-art-6 {
+  background: linear-gradient(90deg, #1c1815 0%, #2a2420 50%, #383028 100%);
+  background-size: 200% 200%;
+}
+
+/* ============================================
+   MARQUEE
+   ============================================ */
+.marquee-track {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ============================================
+   TEXT REVEAL
+   ============================================ */
+.text-reveal {
+  overflow: hidden;
+}
+.text-reveal-line {
+  display: block;
+  transform: translateY(100%);
+  animation: textReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes textReveal {
+  to { transform: translateY(0); }
+}
+
+/* ============================================
+   CURSOR GLOW
+   ============================================ */
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,112,58,0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transition: opacity 0.3s ease;
+}
+.dark .cursor-glow {
+  background: radial-gradient(circle, rgba(212,140,94,0.06) 0%, transparent 70%);
+}
+
+/* ============================================
+   SHIMMER EFFECT
+   ============================================ */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shimmer 3s infinite;
+}
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ============================================
+   NOISE TEXTURE OVERLAY
+   ============================================ */
+.noise-overlay {
+  position: relative;
+}
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ============================================
+   MAGNETIC BUTTON
+   ============================================ */
+.magnetic-button {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================
+   CARD HOVER LIFT
+   ============================================ */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.08);
+}
+.dark .hover-lift:hover {
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+}
+
+/* ============================================
+   STEP CONNECTOR
+   ============================================ */
+.step-connector {
+  position: relative;
+}
+.step-connector::after {
+  content: "";
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  width: 1px;
+  height: calc(100% - 40px);
+  background: linear-gradient(180deg, var(--border-strong), transparent);
+}
+@media (min-width: 768px) {
+  .step-connector::after {
+    top: 50%;
+    left: 100%;
+    width: calc(100% - 40px);
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-strong), transparent);
+  }
+}
