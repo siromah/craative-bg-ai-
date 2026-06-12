@@ -283,7 +283,7 @@ export default function Admin({ db, showToast, refreshDb }: any) {
                   <div className="font-medium text-[15px] text-[var(--ink-900)]">{r.name}</div>
                   <div className="text-[12px] text-[var(--text-secondary)]">{r.email}</div>
                 </div>
-                <Badge variant={r.status === 'pending' ? 'warning' : r.status === 'contacted' ? 'info' : 'default'} className="rounded-full text-[10px]">{r.status}</Badge>
+                <Badge variant={r.status === 'pending' ? 'warning' : r.status === 'contacted' ? 'accent' : 'default'} className="rounded-full text-[10px]">{r.status}</Badge>
               </div>
               <div className="text-[13px] text-[var(--text-secondary)] mb-2">{r.message}</div>
               <div className="text-[12px] text-[var(--text-tertiary)]">Бюджет: {r.budget || 'Не е посочен'}</div>

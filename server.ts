@@ -34,15 +34,25 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 // ============================================
 // Supabase Admin Client (server-side ONLY)
 // ============================================
-const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-  auth: { autoRefreshToken: false, persistSession: false },
-});
+const supabaseAdmin = SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+  : null;
 
 // ============================================
 // Types
 // ============================================
 interface AuthenticatedRequest extends Request {
   user?: { id: string; email?: string; role?: string };
+}
+
+function checkSupabase(res: Response): boolean {
+  if (!supabaseAdmin) {
+    res.status(503).json({ error: 'Базата данни не е конфигурирана. Моля, свържете Supabase.' });
+    return false;
+  }
+  return true;
 }
 
 // ============================================
@@ -61,6 +71,7 @@ const createRateLimiter = (windowMs: number, max: number, keyPrefix: string) =>
     handler: (_req, res) => {
       res.status(429).json({ error: 'Too many requests. Please slow down.' });
     },
+    validate: { keyGeneratorIpFallback: false },
   });
 
 // Stricter limits for auth endpoints
@@ -73,6 +84,8 @@ const apiLimiter = createRateLimiter(60 * 1000, 60, 'api');
 // Middleware: Verify Supabase Session
 // ============================================
 async function requireUser(req: Request, res: Response, next: NextFunction) {
+  if (!checkSupabase(res)) return;
+
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
     res.status(401).json({ error: 'Unauthorized. Please sign in.' });
@@ -80,7 +93,7 @@ async function requireUser(req: Request, res: Response, next: NextFunction) {
   }
 
   const token = authHeader.slice(7);
-  const { data, error } = await supabaseAdmin.auth.getUser(token);
+  const { data, error } = await supabaseAdmin!.auth.getUser(token);
 
   if (error || !data.user) {
     res.status(401).json({ error: 'Invalid or expired session.' });
@@ -88,7 +101,7 @@ async function requireUser(req: Request, res: Response, next: NextFunction) {
   }
 
   // Fetch profile for role info
-  const { data: profile } = await supabaseAdmin
+  const { data: profile } = await supabaseAdmin!
     .from('profiles')
     .select('role, plan')
     .eq('id', data.user.id)
@@ -125,7 +138,7 @@ function validateBody(schema: any) {
       next();
     } catch (err) {
       if (err instanceof ZodError) {
-        const first = err.errors[0];
+        const first = err.issues[0];
         res.status(400).json({ error: first?.message || 'Invalid input.' });
         return;
       }
@@ -148,10 +161,11 @@ function safeError(err: unknown): { error: string } {
 // AI Usage Tracking
 // ============================================
 async function trackAIUsage(userId: string, tokens: number = 0) {
+  if (!supabaseAdmin) return;
   const today = new Date().toISOString().slice(0, 10);
   const { data: existing } = await supabaseAdmin
     .from('ai_usage')
-    .select('request_count')
+    .select('request_count, total_tokens')
     .eq('user_id', userId)
     .eq('date', today)
     .single();
@@ -177,6 +191,7 @@ async function trackAIUsage(userId: string, tokens: number = 0) {
 }
 
 async function getAIUsageToday(userId: string): Promise<number> {
+  if (!supabaseAdmin) return 0;
   const today = new Date().toISOString().slice(0, 10);
   const { data } = await supabaseAdmin
     .from('ai_usage')
@@ -343,6 +358,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Coaching Request (AUTHENTICATED)
   // ============================================
   app.post('/api/coaching', requireUser, apiLimiter, validateBody(CoachingRequestSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { name, email, goal, budget, message } = req.body;
@@ -367,6 +383,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Profile Routes
   // ============================================
   app.get('/api/profile/me', requireUser, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { data, error } = await supabaseAdmin
@@ -383,6 +400,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.patch('/api/profile/me', requireUser, apiLimiter, validateBody(UpdateProfileSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { error } = await supabaseAdmin
@@ -401,6 +419,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Posts (Community)
   // ============================================
   app.get('/api/posts', requireUser, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const { data, error } = await supabaseAdmin
         .from('posts')
@@ -415,6 +434,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.post('/api/posts', requireUser, apiLimiter, validateBody(CreatePostSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { type, text, tags } = req.body;
@@ -433,6 +453,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.patch('/api/posts/:postId', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { postId } = PostIdParamSchema.parse({ postId: req.params.postId });
@@ -460,6 +481,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.delete('/api/posts/:postId', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { postId } = PostIdParamSchema.parse({ postId: req.params.postId });
@@ -482,6 +504,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Comments
   // ============================================
   app.post('/api/comments', requireUser, apiLimiter, validateBody(CreateCommentSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { postId, text } = req.body;
@@ -500,6 +523,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.delete('/api/comments/:commentId', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { commentId } = CommentIdParamSchema.parse({ commentId: req.params.commentId });
@@ -522,6 +546,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Post Likes / Saves
   // ============================================
   app.post('/api/posts/:postId/like', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { postId } = PostIdParamSchema.parse({ postId: req.params.postId });
@@ -535,6 +560,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.delete('/api/posts/:postId/like', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { postId } = PostIdParamSchema.parse({ postId: req.params.postId });
@@ -548,6 +574,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.post('/api/posts/:postId/save', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { postId } = PostIdParamSchema.parse({ postId: req.params.postId });
@@ -561,6 +588,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.delete('/api/posts/:postId/save', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { postId } = PostIdParamSchema.parse({ postId: req.params.postId });
@@ -577,6 +605,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Lesson Progress
   // ============================================
   app.get('/api/lessons/progress', requireUser, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { data, error } = await supabaseAdmin
@@ -592,6 +621,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.post('/api/lessons/progress', requireUser, apiLimiter, validateBody(LessonProgressSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { lessonId, completed, notes, xpEarned } = req.body;
@@ -618,6 +648,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Saved Prompts
   // ============================================
   app.get('/api/prompts/saved', requireUser, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { data, error } = await supabaseAdmin
@@ -633,6 +664,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.post('/api/prompts/saved', requireUser, apiLimiter, validateBody(SavedPromptSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { promptId } = req.body;
@@ -646,6 +678,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.delete('/api/prompts/saved/:promptId', requireUser, apiLimiter, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const user = (req as AuthenticatedRequest).user!;
       const { promptId } = SavedPromptSchema.parse({ promptId: req.params.promptId });
@@ -667,6 +700,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   // Admin Routes
   // ============================================
   app.get('/api/admin/users', requireUser, requireAdmin, async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const { data, error } = await supabaseAdmin
         .from('profiles')
@@ -681,6 +715,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.patch('/api/admin/users', requireUser, requireAdmin, validateBody(AdminUpdateUserSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const { userId, role, plan } = req.body;
 
@@ -697,6 +732,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.delete('/api/admin/users', requireUser, requireAdmin, validateBody(AdminDeleteUserSchema), async (req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const { userId } = req.body;
       // Delete from auth.users (cascades to profiles via FK)
@@ -709,6 +745,7 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   app.get('/api/admin/coaching', requireUser, requireAdmin, async (_req: Request, res: Response) => {
+    if (!checkSupabase(res)) return;
     try {
       const { data, error } = await supabaseAdmin
         .from('coaching_requests')
