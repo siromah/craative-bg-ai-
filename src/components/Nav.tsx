@@ -28,6 +28,16 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
   const unreadCount = db?.notifs?.filter((n:any) => !n.read).length || 0;
   const navRef = useGsapNav();
 
+  const [scrolled, setScrolled] = useState(false);
+  const isHome = page === 'home';
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const [mobMenu, setMobMenu] = useState(false);
   const [notifPanel, setNotifPanel] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
@@ -53,8 +63,14 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
     window.scrollTo(0, 0);
   };
 
-  const activeClass = "font-semibold text-[var(--green-dark)] bg-[var(--green-light)]";
-  const inactiveClass = "text-[var(--text-secondary)] hover:text-[var(--green-dark)] hover:bg-[var(--green-light)]/50";
+  const navIsLight = scrolled || !isHome;
+
+  const activeClass = navIsLight
+    ? "font-semibold text-[var(--green-dark)] bg-[var(--green-light)]"
+    : "font-semibold text-white bg-white/15";
+  const inactiveClass = navIsLight
+    ? "text-[var(--text-secondary)] hover:text-[var(--green-dark)] hover:bg-[var(--green-light)]/50"
+    : "text-white/80 hover:text-white hover:bg-white/10";
 
   const navLinks = [
     {id: 'home', label: 'Начало', icon: Home, route: '/'},
@@ -67,7 +83,14 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
 
   return (
     <>
-      <nav ref={navRef} className="sticky top-0 z-40 h-[52px] retina-glass transition-all duration-300">
+      <nav
+        ref={navRef}
+        className={`sticky top-0 z-40 h-[52px] transition-all duration-300 ${
+          navIsLight
+            ? 'retina-glass'
+            : 'bg-transparent'
+        }`}
+      >
         <div className="section-shell h-full flex items-center justify-between">
 
           {/* LEFT: Logo */}
@@ -76,7 +99,9 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
               <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--green)] rounded-[10px] flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
               </div>
-              <span className="font-display font-medium text-[16px] tracking-normal text-[var(--ink-900)]">AILABS.BG</span>
+              <span className={`font-display font-medium text-[16px] tracking-normal transition-colors ${navIsLight ? 'text-[var(--ink-900)]' : 'text-white'}`}>
+                AILABS.BG
+              </span>
             </div>
 
             {/* CENTER (Desktop): Nav Links */}
@@ -97,7 +122,11 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
           {/* RIGHT: Search + Notif + Theme + Avatar */}
           <div className="flex items-center gap-0.5 md:gap-1 relative" ref={dropdownRef}>
             <button
-              className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--ink-900)]/[0.04] transition-colors hidden sm:flex"
+              className={`p-2 rounded-full transition-colors hidden sm:flex ${
+                navIsLight
+                  ? 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--ink-900)]/[0.04]'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
               onClick={() => navigate('/prompts')}
               aria-label="Търси в prompt-ите"
             >
@@ -111,7 +140,13 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
             {currentUser && (
               <div className="relative">
                 <button
-                  className={`p-2 rounded-full transition-colors relative ${notifPanel ? 'bg-[var(--ink-900)]/[0.05] text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--ink-900)]/[0.04]'}`}
+                  className={`p-2 rounded-full transition-colors relative ${
+                    notifPanel
+                      ? (navIsLight ? 'bg-[var(--ink-900)]/[0.05] text-[var(--text-primary)]' : 'bg-white/15 text-white')
+                      : (navIsLight
+                          ? 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--ink-900)]/[0.04]'
+                          : 'text-white/80 hover:text-white hover:bg-white/10')
+                  }`}
                   onClick={() => { setNotifPanel(!notifPanel); setUserDropdown(false); }}
                 >
                   <Bell size={16} />
@@ -152,8 +187,19 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
 
             {!currentUser ? (
               <div className="hidden md:flex gap-2 ml-1">
-                <button className="h-8 px-4 text-[13px] font-medium text-[var(--text-primary)] hover:bg-[var(--ink-900)]/[0.04] rounded-full transition-colors" onClick={() => navigate('/login')}>Вход</button>
-                <button className="h-8 px-4 text-[13px] font-medium text-white bg-[var(--ink-900)] hover:bg-[var(--ink-700)] rounded-full transition-colors shadow-sm" onClick={() => navigate('/register')}>Започни безплатно</button>
+                <button
+                  className={`h-8 px-4 text-[13px] font-medium rounded-full transition-colors ${
+                    navIsLight
+                      ? 'text-[var(--text-primary)] hover:bg-[var(--ink-900)]/[0.04]'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                  onClick={() => navigate('/login')}
+                >
+                  Вход
+                </button>
+                <button className="h-8 px-4 text-[13px] font-medium text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] rounded-full transition-colors shadow-sm" onClick={() => navigate('/register')}>
+                  Започни безплатно
+                </button>
               </div>
             ) : (
               <div className="relative hidden md:block ml-1">
@@ -192,7 +238,14 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
             )}
 
             {/* Hamburger Mobile */}
-            <button className="md:hidden p-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--ink-900)]/[0.04] ml-1 transition-colors" onClick={() => setMobMenu(true)}>
+            <button
+              className={`md:hidden p-2 rounded-full ml-1 transition-colors ${
+                navIsLight
+                  ? 'text-[var(--text-secondary)] hover:bg-[var(--ink-900)]/[0.04]'
+                  : 'text-white/90 hover:bg-white/10'
+              }`}
+              onClick={() => setMobMenu(true)}
+            >
               <Menu size={18} />
             </button>
           </div>
@@ -214,7 +267,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
             >
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--lavender)] rounded-[10px] flex justify-center items-center">
+                  <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--green)] rounded-[10px] flex justify-center items-center">
                     <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
                   </div>
                   <span className="font-semibold text-[15px] text-[var(--ink-900)]">AILABS.BG</span>
@@ -245,7 +298,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                 {!currentUser ? (
                   <div className="flex flex-col gap-2">
                     <button className="h-10 text-[14px] font-medium border border-[var(--border)] rounded-xl hover:bg-[var(--ink-900)]/[0.03] transition-colors" onClick={() => { setMobMenu(false); navigate('/login'); }}>Вход</button>
-                    <button className="h-10 text-[14px] font-medium rounded-xl bg-[var(--ink-900)] text-white hover:bg-[var(--ink-700)] transition-colors" onClick={() => { setMobMenu(false); navigate('/register'); }}>Започни безплатно</button>
+                    <button className="h-10 text-[14px] font-medium rounded-xl bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] transition-colors" onClick={() => { setMobMenu(false); navigate('/register'); }}>Започни безплатно</button>
                   </div>
                 ) : (
                   <div className="flex flex-col">
